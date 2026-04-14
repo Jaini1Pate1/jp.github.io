@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyan Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+  <div class="screen">
+    <div class="bloom"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+ 
+    <div class="content">
+ 
+      <!-- ASCII banner -->
+      <div class="ascii-banner" id="banner"></div>
+ 
+      <!-- Hint bar -->
+      <div class="hint-bar">
+        <span class="arrow">▶</span>
+        <span class="hint-text">
+          Type a command and press <span>Enter</span>
+          &nbsp;·&nbsp; Click any <span>[ chip ]</span> to run it
+        </span>
+      </div>
+ 
+      <!-- Quick-run chips -->
+      <div class="chips" id="chips"></div>
+ 
+      <!-- Scrollable output history -->
+      <div class="history" id="history"></div>
+ 
+      <!-- Pinned input row -->
+      <div class="input-row">
+        <span class="prompt">jp@portfolio</span>
+        <span class="dim">:</span>
+        <span class="tilde">~</span>
+        <span class="dollar">$&nbsp;</span>
+        <span id="typed-display"></span>
+        <span class="cursor"></span>
+      </div>
+ 
+    </div>
+ 
+    <!-- Status bar -->
+    <div class="statusbar">
+      <span class="si on">● ONLINE</span>
+      <span class="si">TTY1</span>
+      <span class="si">UTF-8</span>
+      <span class="si on" id="clock">00:00:00</span>
+      <span class="si">bash 5.2.15</span>
+      <span class="si right">↑↓ history &nbsp;·&nbsp; <span style="color:#00eedd">clear</span> to reset</span>
+    </div>
+  </div>
+ 
+  <script src="terminal.js"></script>
+</body>
+</html>
+ 

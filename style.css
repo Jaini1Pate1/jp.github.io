@@ -1,0 +1,312 @@
+/* ── Reset & base ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+/* ── CRT screen ── */
+.screen {
+  position: fixed;
+  inset: 0;
+  background: #001c20;
+  border-radius: 30px;
+  overflow: hidden;
+  animation: flicker 12s infinite;
+}
+
+@keyframes flicker {
+  0%,  95%,  100% { opacity: 1;    }
+  95.3%            { opacity: 0.91; }
+  95.7%            { opacity: 1;    }
+  98.2%            { opacity: 0.96; }
+  98.5%            { opacity: 1;    }
+}
+
+/* Scanlines overlay — lighter so text shows through */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent      0px,
+    transparent      3px,
+    rgba(0,0,0,0.07) 3px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Barrel-curve vignette — softened so centre text stays bright */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 85% at 50% 50%,
+    transparent      55%,
+    rgba(0,0,0,0.38) 82%,
+    rgba(0,0,0,0.72) 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+  border-radius: 30px;
+}
+
+/* Phosphor centre bloom */
+.bloom {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 55% at 50% 47%,
+    rgba(0,238,221,0.04) 0%,
+    transparent          70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Layout ── */
+.content {
+  position: absolute;
+  inset: 0;
+  bottom: 22px;
+  padding: 28px 42px 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── ASCII banner ── */
+.ascii-banner {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  color: #00ffee;
+  white-space: pre;
+  line-height: 1.12;
+  text-shadow: 0 0 10px rgba(0,255,238,0.75), 0 0 2px rgba(0,255,238,1);
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Hint bar ── */
+.hint-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  border: 1px solid #0a6655;
+  border-radius: 4px;
+  background: rgba(0,36,32,0.6);
+  animation: pulse-border 3s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%,  100% { border-color: #0a6655;   }
+  50%        { border-color: #00bbaa99; }
+}
+
+.hint-bar .arrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  color: #00ffee;
+  animation: bounce-right 1.2s ease-in-out infinite;
+}
+
+@keyframes bounce-right {
+  0%,  100% { transform: translateX(0);   }
+  50%        { transform: translateX(5px); }
+}
+
+.hint-bar .hint-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: #4ab1a5;            /* was #00998880 — now fully opaque and brighter */
+}
+
+.hint-bar .hint-text span {
+  color: #3bece1;
+}
+
+/* ── Quick-run chips ── */
+.chips {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.chip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: #22ccbb;            /* was #009988 */
+  border: 1px solid #0a6655;
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: rgba(0,28,24,0.5);
+  user-select: none;
+}
+
+.chip:hover {
+  color: #00ffee;
+  border-color: #00ccbb;
+  background: rgba(0,50,44,0.7);
+}
+
+/* ── Scrollable history ── */
+.history {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+
+.history::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Pinned input row ── */
+.input-row {
+  flex-shrink: 0;
+  padding: 4px 0 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14.5px;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* ── Terminal text ── */
+.tline {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.prompt { color: #00ffee; text-shadow: 0 0 6px rgba(0,255,238,0.6); }
+.tilde  { color: #44ffee; }
+.dollar { color: #1aaa88; }       /* was #006655 */
+.dim    { color: #1aaa88; }       /* was #004d44 */
+
+#typed-display {
+  color: #44ffee;
+  text-shadow: 0 0 5px rgba(68,255,238,0.5);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14.5px;
+}
+
+/* ── Help table ── */
+.help-table {
+  margin: 4px 0 2px;
+}
+
+.help-row {
+  display: flex;
+  gap: 0;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.help-cmd {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: #00ffcc;
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.help-desc {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: #33bbaa;            /* was #007766 */
+}
+
+.help-cat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: #1aaa88;            /* was #004d44 */
+  margin: 6px 0 2px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── ls listing ── */
+.ls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 36px;
+  margin: 2px 0;
+}
+
+.ls-row {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.ls-perm         { color: #1aaa88; min-width: 90px; font-size: 11.5px; }
+.ls-size         { color: #22ccbb; min-width: 32px; font-size: 12.5px; text-align: right; }
+.ls-date         { color: #1aaa88; min-width: 78px; font-size: 11.5px; }
+.ls-name         { color: #33ddcc; }
+.ls-name.dir     { color: #00ffcc; text-shadow: 0 0 5px rgba(0,255,200,0.5); }
+.ls-name.exec    { color: #55ffee; text-shadow: 0 0 5px rgba(85,255,238,0.5); }
+.ls-name.hidden  { color: #22aa99; }
+
+/* ── Blinking cursor ── */
+.cursor {
+  display: inline-block;
+  width: 9px;
+  height: 15px;
+  background: #00ffee;
+  box-shadow: 0 0 8px rgba(0,255,238,1);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+  flex-shrink: 0;
+}
+
+@keyframes blink {
+  0%,  100% { opacity: 1; }
+  50%        { opacity: 0; }
+}
+
+/* ── Status bar ── */
+.statusbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: rgba(0,20,24,0.85);
+  border-top: 1px solid #0a5544;
+  display: flex;
+  align-items: center;
+  padding: 0 42px;
+  gap: 28px;
+  z-index: 12;
+}
+
+.si        { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #1aaa88; letter-spacing: 0.5px; }
+.si.on     { color: #00ddcc; text-shadow: 0 0 5px rgba(0,221,204,0.5); }
+.si.right  { margin-left: auto; }
